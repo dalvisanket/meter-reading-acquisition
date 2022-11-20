@@ -1,0 +1,15 @@
+pluginManagement{
+    plugins{
+        id 'application'
+    }
+}
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'meter-reading-acquisition'
+include 'meter-reading'
+include 'api-domain'
+
