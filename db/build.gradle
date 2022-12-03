@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+dependencies {
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+
+    implementation "org.liquibase:liquibase-core:$liquidbase_version"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    implementation "mysql:mysql-connector-java:$mysql_connector_version"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:$spring_boot_version"
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar{
+    enabled = false
+}
+
+jar{
+    enabled = true
+}

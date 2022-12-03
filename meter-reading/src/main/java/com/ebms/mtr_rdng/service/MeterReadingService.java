@@ -1,4 +1,4 @@
-package com.ebms.mtr_rdng.config.queue;
+package com.ebms.mtr_rdng.service;
 
 import com.ebms.mtr_rdng.domain.model.MeterReading;
 import com.ebms.mtr_rdng.domain.model.queue.MeterReadingQueueName;
@@ -11,7 +11,7 @@ public class MeterReadingService {
 
     @KafkaListener(topics = MeterReadingQueueName.METER_READING_QUEUE, groupId = "def", containerFactory = "userFactory")
     void meterReading(MeterReading data){
-        System.out.println("Listener received : " + data.mId() + data.readingForYearMonth() + data.unitReading());
+        System.out.println("Listener received : " + data.mId() + data.billingCycle() + data.unitReading());
     }
 
 }

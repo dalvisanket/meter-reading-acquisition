@@ -24,7 +24,7 @@ public class MeterReadingApplication {
                 ResidentialMeterReading residentialMeterReading = ResidentialMeterReading.builder()
                         .unitReading(12345)
                         .mId(987)
-                        .readingForYearMonth(YearMonth.now())
+                        .billingCycle(YearMonth.now())
                         .build();
 
                 for(int i = 0; i<10; i++)

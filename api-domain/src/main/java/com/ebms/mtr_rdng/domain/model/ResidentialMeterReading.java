@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import org.apache.kafka.common.protocol.types.Field;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 @JsonDeserialize( builder = ResidentialMeterReading.ResidentialMeterReadingBuilder.class)
@@ -14,14 +15,16 @@ public class ResidentialMeterReading implements MeterReading{
 
     private final long mId;
     private final double unitReading;
-    private final YearMonth readingForYearMonth;
+    private final YearMonth billingCycle;
+    private final LocalDate reportingDate;
     private final MeterType meterType;
     private final String reportingEmp;
 
     private ResidentialMeterReading(ResidentialMeterReadingBuilder builder){
         this.mId = builder.mId;
         this.unitReading = builder.unitReading;
-        this.readingForYearMonth = builder.readingForYearMonth;
+        this.billingCycle = builder.billingCycle;
+        this.reportingDate = builder.reportingDate;
         this.meterType = builder.meterType;
         this.reportingEmp = builder.reportingEmp;
     }
@@ -39,8 +42,15 @@ public class ResidentialMeterReading implements MeterReading{
 
     @Override
     @JsonGetter
-    public YearMonth readingForYearMonth() {
-        return this.readingForYearMonth;
+    public YearMonth billingCycle() {
+        return this.billingCycle;
+    }
+
+
+    @Override
+    @JsonGetter
+    public LocalDate reportingDate() {
+        return this.reportingDate;
     }
 
     @Override
@@ -64,7 +74,8 @@ public class ResidentialMeterReading implements MeterReading{
 
         private long mId;
         private double unitReading;
-        private YearMonth readingForYearMonth;
+        private YearMonth billingCycle;
+        private LocalDate reportingDate;
         private MeterType meterType;
         private String reportingEmp;
 
@@ -81,8 +92,14 @@ public class ResidentialMeterReading implements MeterReading{
         }
 
         @JsonSetter
-        public ResidentialMeterReadingBuilder readingForYearMonth(YearMonth readingForYearMonth){
-            this.readingForYearMonth = readingForYearMonth;
+        public ResidentialMeterReadingBuilder billingCycle(YearMonth billingCycle){
+            this.billingCycle = billingCycle;
+            return this;
+        }
+
+        @JsonSetter
+        public ResidentialMeterReadingBuilder reportingDate(LocalDate reportingDate){
+            this.reportingDate = reportingDate;
             return this;
         }
 

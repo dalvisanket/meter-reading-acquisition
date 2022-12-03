@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+
+    <changeSet id="create consumer table" author="liquibase">
+
+        <createTable schemaName="ebms" tableName="consumer">
+
+            <column name="consumer_id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(50)">
+            <constraints nullable="false"/>
+            </column>
+
+            <column name="address" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="city" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>
