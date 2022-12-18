@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+
+    <changeSet id="drop meter_reading constraints" author="sanket">
+        <dropAllForeignKeyConstraints baseTableName="meter_reading" baseTableSchemaName="ebms"/>
+    </changeSet>
+
+    <changeSet id="change meter-id to bigint" author="sanket">
+        <modifyDataType tableName="meter" columnName="meter_id" newDataType="bigint" schemaName="ebms"/>
+    </changeSet>
+
+    <changeSet id="change emp-id to bigint" author="sanket">
+        <modifyDataType tableName="employee" columnName="emp_id" newDataType="bigint" schemaName="ebms"/>
+    </changeSet>
+
+    <changeSet id="change consumer_id to bigint" author="sanket">
+        <modifyDataType tableName="consumer" columnName="consumer_id" newDataType="bigint" schemaName="ebms"/>
+    </changeSet>
+
+    <changeSet id="change reporting_emp_id and meter_id to bigint" author="sanket">
+        <modifyDataType tableName="meter_reading" columnName="reading_id" newDataType="bigint" schemaName="ebms"/>
+        <modifyDataType tableName="meter_reading" columnName="meter_id" newDataType="bigint" schemaName="ebms"/>
+        <modifyDataType tableName="meter_reading" columnName="reporting_emp_id" newDataType="bigint" schemaName="ebms"/>
+    </changeSet>
+
+
+    <changeSet id="add foreign key contraints" author="sanket">
+        <addForeignKeyConstraint baseTableName="meter_reading"
+                                 baseColumnNames="meter_id"
+                                 constraintName="fk_meter_id"
+                                 referencedTableName="meter"
+                                 referencedColumnNames="meter_id"
+                                 onDelete="NO ACTION"
+                                 onUpdate="CASCADE"
+        />
+
+        <addForeignKeyConstraint baseTableName="meter_reading"
+                                 baseColumnNames="reporting_emp_id"
+                                 constraintName="reporting_emp_id"
+                                 referencedTableName="employee"
+                                 referencedColumnNames="emp_id"
+                                 onDelete="NO ACTION"
+                                 onUpdate="CASCADE"
+        />
+    </changeSet>
+
+
+</databaseChangeLog>
