@@ -1,4 +1,4 @@
-package com.ebms.mtr_rdng.config.queue;
+package com.ebms.mtr_rdng.queue;
 
 import com.ebms.mtr_rdng.domain.model.MeterReading;
 import com.ebms.mtr_rdng.domain.model.queue.MeterReadingQueueName;

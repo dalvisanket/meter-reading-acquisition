@@ -6,10 +6,19 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
+import javax.persistence.*;
 
+@Entity
+@Table(name = "meter")
 @JsonDeserialize(builder = MeterRow.MeterRowBuilder.class)
 public class MeterRow {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "meter_id", nullable = false)
     private long mId;
+
+    @Column(name = "meter_type")
     private String meterType;
 
     private MeterRow(MeterRowBuilder meterBuilder){
@@ -17,6 +26,7 @@ public class MeterRow {
         this.meterType = meterBuilder.meterType;
     }
 
+    public MeterRow(){}
     @JsonGetter
     public long mId(){
         return this.mId;

@@ -11,7 +11,7 @@
 
         <createTable schemaName="ebms" tableName="consumer">
 
-            <column name="consumer_id" type="int">
+            <column name="consumer_id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
 

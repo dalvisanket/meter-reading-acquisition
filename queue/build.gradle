@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+dependencies {
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    implementation project(":api-domain")
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar{
+    enabled = false
+}
+
+jar{
+    enabled = true
+}
+
+springBoot{
+    mainClass = "com.ebms.mtr_rdng.KafkaQueueApplication"
+}

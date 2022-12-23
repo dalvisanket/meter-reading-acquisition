@@ -13,4 +13,5 @@ rootProject.name = 'meter-reading-acquisition'
 include 'meter-reading'
 include 'api-domain'
 include 'db'
+include 'queue'
 

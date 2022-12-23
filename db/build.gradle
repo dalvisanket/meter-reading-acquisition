@@ -2,7 +2,8 @@ plugins {
     id 'java'
     id 'java-library'
     id 'org.springframework.boot'
-    id 'io.spring.dependency-management'
+    id 'io.spring.dependency-management' apply false
+    id 'nu.studer.jooq' version '6.0'
 }
 
 dependencies {
@@ -10,15 +11,83 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
 
+    implementation project(":api-domain")
     implementation "org.liquibase:liquibase-core:$liquidbase_version"
-    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jackson_version"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jackson_version"
 
     implementation "mysql:mysql-connector-java:$mysql_connector_version"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:$spring_boot_version"
 
-    implementation project(":api-domain")
+    jooqGenerator "mysql:mysql-connector-java:$mysql_connector_version"
 
 }
+
+import org.jooq.meta.jaxb.Logging
+
+def props = new Properties()
+file("src/main/resources/application-db.properties").withInputStream { props.load(it)}
+
+jooq {
+    version = "$jooq_version"
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = true
+
+            generationTool {
+                logging = Logging.WARN
+                jdbc {
+                    driver = 'com.mysql.cj.jdbc.Driver'
+                    url = props.getProperty("spring.datasource.url")
+                    user = props.getProperty("spring.datasource.username")
+                    password = props.getProperty("spring.datasource.password")
+                    properties {
+                        property {
+                            key = 'ssl'
+                            value = 'true'
+                        }
+                    }
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.mysql.MySQLDatabase'
+                        inputSchema = 'ebms'
+                        forcedTypes {
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'JSONB?'
+                            }
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'INET'
+                            }
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        immutablePojos = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'com.ebms.mtr_rdng.db'
+                        directory = 'build/generated-src/jooq/main'
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
+
 
 test {
     useJUnitPlatform()

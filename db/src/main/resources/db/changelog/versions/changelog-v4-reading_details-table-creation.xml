@@ -10,7 +10,7 @@
     <changeSet id="create reading details table" author="sanket">
 
         <createTable schemaName="ebms" tableName="meter_reading">
-            <column name="reading_id" type="int">
+            <column name="reading_id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
 

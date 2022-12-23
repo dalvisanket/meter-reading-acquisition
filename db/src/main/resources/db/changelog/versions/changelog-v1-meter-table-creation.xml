@@ -11,7 +11,7 @@
 
         <createTable schemaName="ebms" tableName="meter">
 
-            <column name="meter_id" type="int">
+            <column name="meter_id" type="int" autoIncrement="true" >
             <constraints nullable="false" primaryKey="true"/>
             </column>
 
