@@ -1,6 +1,5 @@
 package com.ebms.mtr_rdng.db.domain;
 
-import com.ebms.mtr_rdng.db.domain.repository.MeterReadingRepository;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
