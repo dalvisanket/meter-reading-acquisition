@@ -6,8 +6,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+
 
 @JsonDeserialize(builder = ConsumerRow.ConsumerRowBuilder.class)
 public class ConsumerRow {
@@ -17,16 +20,22 @@ public class ConsumerRow {
     private String address;
     private String city;
     private int zipcode;
+    private String email;
+
+    private String is_active;
 
 
-    private ConsumerRow(ConsumerRowBuilder consumerRowBuilder){
-        this.consumer_id = consumerRowBuilder.consumer_id;
-        this.name = consumerRowBuilder.name;
-        this.city = consumerRowBuilder.city;
-        this.address = consumerRowBuilder.address;
-        this.zipcode = consumerRowBuilder.zipcode;
+    private ConsumerRow(ConsumerRowBuilder builder){
+        this.consumer_id = builder.consumer_id;
+        this.name = builder.name;
+        this.city = builder.city;
+        this.address = builder.address;
+        this.zipcode = builder.zipcode;
+        this.email = builder.email;
+        this.is_active = builder.is_active;
     }
 
+    public ConsumerRow(){}
 
     @JsonGetter
     public long consumer_id(){
@@ -54,7 +63,15 @@ public class ConsumerRow {
     }
 
     @JsonGetter
-    public ConsumerRowBuilder builder(){
+    public String email(){ return this.email; }
+
+    @JsonGetter
+    public boolean is_active(){
+        if(is_active.equals("yes")) return true;
+        return false;
+    }
+
+    public static ConsumerRowBuilder builder(){
         return new ConsumerRowBuilder();
     }
 
@@ -67,6 +84,8 @@ public class ConsumerRow {
         private String address;
         private String city;
         private int zipcode;
+        private String email;
+        private String is_active;
 
         @JsonSetter
         public ConsumerRowBuilder consumer_id(long consumer_id){
@@ -95,6 +114,18 @@ public class ConsumerRow {
         @JsonSetter
         public ConsumerRowBuilder zipcode(int zipcode){
             this.zipcode = zipcode;
+            return this;
+        }
+
+        @JsonSetter
+        public ConsumerRowBuilder email(String email){
+            this.email = email;
+            return this;
+        }
+
+        @JsonSetter
+        public ConsumerRowBuilder is_active(String is_active){
+            this.is_active = is_active;
             return this;
         }
 

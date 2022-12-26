@@ -6,35 +6,36 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "meter")
 @JsonDeserialize(builder = MeterRow.MeterRowBuilder.class)
 public class MeterRow {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "meter_id", nullable = false)
-    private long mId;
+    private long meter_id;
 
-    @Column(name = "meter_type")
     private String meterType;
 
+    private String in_use;
+
     private MeterRow(MeterRowBuilder meterBuilder){
-        this.mId = meterBuilder.mId;
+        this.meter_id = meterBuilder.meter_id;
         this.meterType = meterBuilder.meterType;
+        this.in_use = meterBuilder.in_use;
     }
 
     public MeterRow(){}
     @JsonGetter
-    public long mId(){
-        return this.mId;
+    public long meter_id(){
+        return this.meter_id;
     }
 
     @JsonGetter
     public String meterType(){
         return this.meterType;
+    }
+
+    @JsonGetter
+    public boolean in_use(){
+        if(this.in_use.equals("yes")) return true;
+        return false;
     }
 
     public static MeterRowBuilder builder(){
@@ -44,19 +45,25 @@ public class MeterRow {
     @JsonPOJOBuilder
     public static final class MeterRowBuilder implements Builder<MeterRow>{
 
-        private long mId;
+        private long meter_id;
         private String meterType;
-
+        private String in_use;
 
         @JsonSetter
-        public MeterRowBuilder mId(long mId){
-            this.mId = mId;
+        public MeterRowBuilder mId(long meter_id){
+            this.meter_id = meter_id;
             return this;
         }
 
         @JsonSetter
         public MeterRowBuilder meterType(String meterType){
             this.meterType = meterType;
+            return this;
+        }
+
+        @JsonSetter
+        public  MeterRowBuilder in_use(String in_use){
+            this.in_use = in_use;
             return this;
         }
 

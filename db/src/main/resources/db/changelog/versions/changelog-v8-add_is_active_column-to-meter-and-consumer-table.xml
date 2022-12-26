@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+
+    <changeSet id="add is_active column to meter and consumer table" author="sanket">
+
+        <addColumn tableName="consumer" schemaName="ebms">
+            <column name="is_active" type="enum('yes','no')" defaultValue="yes">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="meter" schemaName="ebms">
+            <column name="in_use" type="enum('yes','no')" defaultValue="no">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+
+    </changeSet>
+
+
+</databaseChangeLog>
