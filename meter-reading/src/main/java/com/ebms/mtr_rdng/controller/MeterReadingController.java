@@ -5,11 +5,15 @@ import com.ebms.mtr_rdng.db.domain.model.MeterRow;
 import com.ebms.mtr_rdng.db.domain.repository.DatabaseRepository;
 import com.ebms.mtr_rdng.domain.model.MeterType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -20,18 +24,31 @@ public class MeterReadingController {
     DatabaseRepository databaseRepository;
 
     @PutMapping("/new-meter")
-    public long addNewMeter(){
+    public ResponseEntity addNewMeter(){
         long newMeterId = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
-        return databaseRepository.addNewMeter(newMeterId, MeterType.RESIDENTIAL);
+        try{
+            long savedMeterId = databaseRepository.addNewMeter(newMeterId, MeterType.RESIDENTIAL);
+            return new ResponseEntity<>("Created new Meter with meter id : " + savedMeterId, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error creating a new Meter",HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/get-meter/{meter_id}")
-    public MeterRow getMeter(@PathVariable(name = "meter_id") long meter_id){
-        return databaseRepository.getMeter(meter_id);
+    public ResponseEntity getMeter(@PathVariable(name = "meter_id") long meter_id){
+        try{
+            MeterRow meter = databaseRepository.getMeter(meter_id);
+            return new ResponseEntity<>(meter,HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>("Error fetching meter for meter id : " + meter_id,HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/new-consumer")
-    public long addNewConsumer(@RequestBody ConsumerRow consumer){
+    public ResponseEntity addNewConsumer(@RequestBody ConsumerRow consumer){
         long newConsumerId = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
 
         ConsumerRow newConsumer = ConsumerRow.builder()
@@ -44,6 +61,34 @@ public class MeterReadingController {
                 .is_active("yes")
                 .build();
 
-        return databaseRepository.addNewConsumer(newConsumer);
+        try{
+            long customerId = databaseRepository.addNewConsumer(newConsumer);
+            return new ResponseEntity<>("Inserted new Customer with customer id : " + customerId, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity("Error creating a new Customer",HttpStatus.BAD_REQUEST);
+        }
     }
+
+    @PostMapping("/assign-meter/{meter_id}/{consumer_id}")
+    public ResponseEntity assignMeterToConsumer(@PathVariable(name = "meter_id") long meter_id, @PathVariable(name = "consumer_id") long consumer_id){
+        try {
+            MeterRow meter = databaseRepository.getMeter(meter_id);
+            if(meter.in_use()){
+                return new ResponseEntity("Meter with meter id:" +meter_id+ " already in use",HttpStatus.BAD_REQUEST);
+            }
+
+
+            boolean res = databaseRepository.assignMeterToConsumer(consumer_id,meter_id);
+            if(res){
+                return new ResponseEntity("Meter with meter id : " +meter_id+ " successfully assigned to consumer with consumer id : "+ consumer_id,HttpStatus.OK );
+            }
+            throw new RuntimeException();
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error assigning meter to coonsumer", HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
+
 }
