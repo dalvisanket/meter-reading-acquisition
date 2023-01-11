@@ -52,6 +52,12 @@ public class MeterReadingRepository implements DatabaseRepository{
     }
 
     @Override
+    public boolean changeMeterStatus(long meter_id, boolean in_use) {
+        context.update(METER).set(METER.IN_USE,in_use?MeterInUse.yes:MeterInUse.no).where(METER.METER_ID.eq(meter_id)).execute();
+        return true;
+    }
+
+    @Override
     public long addNewConsumer(ConsumerRow consumer) {
 
         context.insertInto(CONSUMER,CONSUMER.CONSUMER_ID,CONSUMER.NAME,CONSUMER.ADDRESS,CONSUMER.CITY,CONSUMER.ZIPCODE, CONSUMER.EMAIL, CONSUMER.IS_ACTIVE)
@@ -77,10 +83,16 @@ public class MeterReadingRepository implements DatabaseRepository{
     @Override
     public boolean assignMeterToConsumer(long consumer_id, long meter_id) {
 
+        if(context.select().from(CONSUMER_METER).where(CONSUMER_METER.CONSUMER_ID.eq(consumer_id)).fetch().size() > 0){
+            throw new RuntimeException();
+        }
+
        if(getConsumer(consumer_id).is_active() && !getMeter(meter_id).in_use()){
            context.insertInto(CONSUMER_METER,CONSUMER_METER.CONSUMER_ID, CONSUMER_METER.METER_ID)
                    .values(consumer_id,meter_id)
                    .execute();
+
+           changeMeterStatus(meter_id,true);
 
            return true;
        }

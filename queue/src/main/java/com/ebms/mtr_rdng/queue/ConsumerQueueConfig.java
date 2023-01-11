@@ -1,7 +1,7 @@
 package com.ebms.mtr_rdng.queue;
 
 import com.ebms.mtr_rdng.domain.model.MeterReading;
-import com.ebms.mtr_rdng.domain.model.queue.MeterReadingQueueName;
+import com.ebms.mtr_rdng.service.MeterReadingService;
 import com.ebms.util.queue.deserializer.ConsumerCustomDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -23,6 +23,9 @@ public class ConsumerQueueConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${meter.reading.topic}")
+    private String meterReadingTopic;
+
     public Map<String,Object> consumerConfig(){
         return new HashMap<String,Object>(){{
             put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -32,7 +35,7 @@ public class ConsumerQueueConfig {
     @Bean
     public ConsumerCustomDeserializer consumerCustomDeserializer(){
         return new ConsumerCustomDeserializer(new HashMap<String,Class<?>>(){{
-            put(MeterReadingQueueName.METER_READING_QUEUE, MeterReading.class);
+            put(meterReadingTopic, MeterReading.class);
         }});
     }
 

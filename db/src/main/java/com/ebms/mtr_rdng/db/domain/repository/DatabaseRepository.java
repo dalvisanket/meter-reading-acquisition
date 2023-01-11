@@ -10,6 +10,8 @@ public interface DatabaseRepository {
 
     MeterRow getMeter(long meter_id);
 
+    boolean changeMeterStatus(long meter_id, boolean in_use);
+
     long addNewConsumer(ConsumerRow consumer);
 
     ConsumerRow getConsumer(long consumer_id);
