@@ -1,3 +1,13 @@
+import org.jooq.meta.jaxb.Logging
+
+buildscript {
+    dependencies {
+        classpath "org.liquibase:liquibase-gradle-plugin:2.1.1"
+        classpath "mysql:mysql-connector-java:$mysql_connector_version"
+    }
+}
+
+
 plugins {
     id 'java'
     id 'java-library'
@@ -5,6 +15,8 @@ plugins {
     id 'io.spring.dependency-management' apply false
     id 'nu.studer.jooq' version '6.0'
 }
+
+apply plugin: 'org.liquibase.gradle'
 
 dependencies {
 
@@ -24,12 +36,35 @@ dependencies {
 
     jooqGenerator "mysql:mysql-connector-java:$mysql_connector_version"
 
+
+    liquibaseRuntime "org.liquibase:liquibase-core:$liquidbase_version"
+    liquibaseRuntime "org.liquibase:liquibase-groovy-dsl:3.0.2"
+    liquibaseRuntime "mysql:mysql-connector-java:$mysql_connector_version"
+    liquibaseRuntime 'info.picocli:picocli:4.6.3'
+
+
 }
 
-import org.jooq.meta.jaxb.Logging
-
 def props = new Properties()
-file("src/main/resources/application-db.properties").withInputStream { props.load(it)}
+file("src/main/resources/application-dev.properties").withInputStream { props.load(it)}
+
+task('deploy_changelog') {
+    doFirst() {
+        liquibase {
+            activities {
+                main {
+                    changeLogFile '/db/src/main/resources/db/changelog/changelog-master.xml'
+                    url props.getProperty("spring.datasource.url")
+                    username props.getProperty("spring.datasource.username")
+                    password props.getProperty("spring.datasource.password")
+                }
+            }
+        }
+    }
+}
+
+update.dependsOn(deploy_changelog)
+build.dependsOn(update)
 
 jooq {
     version = "$jooq_version"

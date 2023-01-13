@@ -2,7 +2,6 @@ package com.ebms.mtr_rdng;
 
 
 import com.ebms.mtr_rdng.domain.model.ResidentialMeterReading;
-import com.ebms.mtr_rdng.domain.model.queue.MeterReadingQueueName;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,7 +28,7 @@ public class KafkaQueueApplication {
                     .build();
 
             for(int i = 0; i<10; i++)
-                kafkaTemplate.send(MeterReadingQueueName.METER_READING_QUEUE, residentialMeterReading);
+                kafkaTemplate.send("METER-READING-DEV", residentialMeterReading);
 
         };
     }

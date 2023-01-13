@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +22,8 @@ public class MeterReadingController {
     @Autowired
     DatabaseRepository databaseRepository;
 
-    @PutMapping("/new-meter")
-    public ResponseEntity addNewMeter(){
+    @PostMapping("/new-meter")
+    public ResponseEntity<String> addNewMeter(){
         long newMeterId = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
         try{
             long savedMeterId = databaseRepository.addNewMeter(newMeterId, MeterType.RESIDENTIAL);
@@ -37,17 +36,17 @@ public class MeterReadingController {
     }
 
     @GetMapping("/get-meter/{meter_id}")
-    public ResponseEntity getMeter(@PathVariable(name = "meter_id") long meter_id){
+    public ResponseEntity<MeterRow> getMeter(@PathVariable(name = "meter_id") long meter_id){
         try{
             MeterRow meter = databaseRepository.getMeter(meter_id);
             return new ResponseEntity<>(meter,HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>("Error fetching meter for meter id : " + meter_id,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/new-consumer")
+    @PostMapping("/new-consumer")
     public ResponseEntity addNewConsumer(@RequestBody ConsumerRow consumer){
         long newConsumerId = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
 

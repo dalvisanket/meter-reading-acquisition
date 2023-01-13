@@ -1,5 +1,7 @@
 package com.ebms.mtr_rdng.db.domain;
 
+import com.ebms.mtr_rdng.db.domain.repository.DatabaseRepository;
+import com.ebms.mtr_rdng.db.domain.repository.MeterReadingRepository;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -28,9 +30,13 @@ public class DatabaseConfiguration {
         return DriverManager.getConnection(databaseURL,userName,password);
     }
 
-    @Bean
     public DSLContext context() throws SQLException {
         return DSL.using(connection(), SQLDialect.MYSQL);
+    }
+
+    @Bean
+    public MeterReadingRepository databaseRepository() throws SQLException {
+        return new MeterReadingRepository(context());
     }
 
 

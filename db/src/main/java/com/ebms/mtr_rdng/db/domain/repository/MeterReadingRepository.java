@@ -9,9 +9,6 @@ import com.ebms.mtr_rdng.db.enums.MeterInUse;
 import com.ebms.mtr_rdng.domain.model.MeterType;
 import org.jooq.DSLContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 import static com.ebms.mtr_rdng.db.tables.Consumer.CONSUMER;
@@ -19,10 +16,8 @@ import static com.ebms.mtr_rdng.db.tables.Meter.METER;
 import static com.ebms.mtr_rdng.db.tables.ConsumerMeter.CONSUMER_METER;
 
 
-@Component
 public class MeterReadingRepository implements DatabaseRepository{
 
-    @Autowired
     private DSLContext context;
 
     public MeterReadingRepository(DSLContext context){
@@ -33,7 +28,7 @@ public class MeterReadingRepository implements DatabaseRepository{
     public long addNewMeter(long meter_id, MeterType meterType) {
 
         context.insertInto(METER,METER.METER_ID,METER.METER_TYPE,METER.IN_USE)
-                .values(meter_id,meterType.name(), MeterInUse.no)
+                .values(meter_id,meterType.name(), MeterInUse.false_)
                 .execute();
 
         return getMeter(meter_id).meter_id();
@@ -53,7 +48,7 @@ public class MeterReadingRepository implements DatabaseRepository{
 
     @Override
     public boolean changeMeterStatus(long meter_id, boolean in_use) {
-        context.update(METER).set(METER.IN_USE,in_use?MeterInUse.yes:MeterInUse.no).where(METER.METER_ID.eq(meter_id)).execute();
+        context.update(METER).set(METER.IN_USE,in_use?MeterInUse.true_:MeterInUse.false_).where(METER.METER_ID.eq(meter_id)).execute();
         return true;
     }
 
@@ -61,7 +56,7 @@ public class MeterReadingRepository implements DatabaseRepository{
     public long addNewConsumer(ConsumerRow consumer) {
 
         context.insertInto(CONSUMER,CONSUMER.CONSUMER_ID,CONSUMER.NAME,CONSUMER.ADDRESS,CONSUMER.CITY,CONSUMER.ZIPCODE, CONSUMER.EMAIL, CONSUMER.IS_ACTIVE)
-                .values(consumer.consumer_id(),consumer.name(), consumer.address(),consumer.city(),consumer.zipcode(),consumer.email(), ConsumerIsActive.yes)
+                .values(consumer.consumer_id(),consumer.name(), consumer.address(),consumer.city(),consumer.zipcode(),consumer.email(), ConsumerIsActive.true_)
                 .execute();
 
         return getConsumer(consumer.consumer_id()).consumer_id();

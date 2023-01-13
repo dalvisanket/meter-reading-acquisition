@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+
+    <changeSet runInTransaction="false" id="update enum in_use and is_active column to true and false meter and consumer table" author="sanket">
+        <sql>ALTER TABLE meter CHANGE in_use
+            in_use ENUM('true','false','yes','no') CHARACTER SET utf8
+            COLLATE utf8_general_ci NOT NULL DEFAULT 'false';
+        ALTER TABLE consumer CHANGE is_active
+            is_active ENUM('true','false','yes','no') CHARACTER SET utf8
+            COLLATE utf8_general_ci NOT NULL DEFAULT 'false';
+        UPDATE meter set in_use = 'true' WHERE in_use = 'yes';
+        UPDATE meter set in_use = 'false' WHERE in_use = 'no';
+        UPDATE consumer set is_active = 'true' WHERE is_active = 'yes';
+        UPDATE consumer set is_active = 'false' WHERE is_active = 'no';
+        ALTER TABLE meter CHANGE in_use
+            in_use ENUM('true','false') CHARACTER SET utf8
+            COLLATE utf8_general_ci NOT NULL DEFAULT 'false';
+        ALTER TABLE consumer CHANGE is_active
+            is_active ENUM('true','false') CHARACTER SET utf8
+            COLLATE utf8_general_ci NOT NULL DEFAULT 'false';</sql>
+    </changeSet>
+
+
+</databaseChangeLog>
