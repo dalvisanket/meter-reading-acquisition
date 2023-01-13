@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+
+    <changeSet id="add is_meter_assigned column to consumer table" author="sanket">
+
+        <addColumn tableName="consumer" schemaName="ebms">
+            <column name="is_meter_assigned" type="enum('true','false')" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+
+</databaseChangeLog>

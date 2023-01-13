@@ -21,8 +21,9 @@ public class ConsumerRow {
     private String city;
     private int zipcode;
     private String email;
-
     private String is_active;
+
+    private String is_meter_assigned;
 
 
     private ConsumerRow(ConsumerRowBuilder builder){
@@ -33,6 +34,7 @@ public class ConsumerRow {
         this.zipcode = builder.zipcode;
         this.email = builder.email;
         this.is_active = builder.is_active;
+        this.is_meter_assigned = builder.is_meter_assigned;
     }
 
     public ConsumerRow(){}
@@ -67,7 +69,13 @@ public class ConsumerRow {
 
     @JsonGetter
     public boolean is_active(){
-        if(is_active.equals("yes")) return true;
+        if(is_active.equals("true")) return true;
+        return false;
+    }
+
+    @JsonGetter
+    public boolean is_meter_assigned(){
+        if(is_meter_assigned.equals("true")) return true;
         return false;
     }
 
@@ -86,6 +94,7 @@ public class ConsumerRow {
         private int zipcode;
         private String email;
         private String is_active;
+        private String is_meter_assigned;
 
         @JsonSetter
         public ConsumerRowBuilder consumer_id(long consumer_id){
@@ -126,6 +135,12 @@ public class ConsumerRow {
         @JsonSetter
         public ConsumerRowBuilder is_active(String is_active){
             this.is_active = is_active;
+            return this;
+        }
+
+        @JsonSetter
+        public ConsumerRowBuilder is_meter_assigned(String is_meter_assigned){
+            this.is_meter_assigned = is_meter_assigned;
             return this;
         }
 

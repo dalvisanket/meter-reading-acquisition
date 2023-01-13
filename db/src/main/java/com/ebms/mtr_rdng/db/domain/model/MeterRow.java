@@ -34,7 +34,7 @@ public class MeterRow {
 
     @JsonGetter
     public boolean in_use(){
-        if(this.in_use.equals("yes")) return true;
+        if(this.in_use.equals("true")) return true;
         return false;
     }
 
@@ -50,7 +50,7 @@ public class MeterRow {
         private String in_use;
 
         @JsonSetter
-        public MeterRowBuilder mId(long meter_id){
+        public MeterRowBuilder meter_id(long meter_id){
             this.meter_id = meter_id;
             return this;
         }
