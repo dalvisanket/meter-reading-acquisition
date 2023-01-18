@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
@@ -46,6 +47,11 @@ public class MeterReadingController {
         }
     }
 
+    @GetMapping("/get-all-meters")
+    public ResponseEntity<List<MeterRow>> getAllMeter(){
+        return new ResponseEntity<>(databaseRepository.getAllMeters(),HttpStatus.OK);
+    }
+
     @PostMapping("/new-consumer")
     public ResponseEntity addNewConsumer(@RequestBody ConsumerRow consumer){
         long newConsumerId = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
@@ -66,6 +72,11 @@ public class MeterReadingController {
         }catch (Exception e){
             return new ResponseEntity("Error creating a new Customer",HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/get-all-consumers")
+    public ResponseEntity<List<ConsumerRow>> getAllConsumers(){
+        return new ResponseEntity<>(databaseRepository.getAllConsumer(),HttpStatus.OK);
     }
 
     @PostMapping("/assign-meter/{meter_id}/{consumer_id}")
