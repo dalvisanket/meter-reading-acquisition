@@ -68,15 +68,13 @@ public class ConsumerRow {
     public String email(){ return this.email; }
 
     @JsonGetter
-    public boolean is_active(){
-        if(is_active.equals("true")) return true;
-        return false;
+    public String is_active(){
+        return is_active;
     }
 
     @JsonGetter
-    public boolean is_meter_assigned(){
-        if(is_meter_assigned.equals("true")) return true;
-        return false;
+    public String is_meter_assigned(){
+        return is_meter_assigned;
     }
 
     public static ConsumerRowBuilder builder(){

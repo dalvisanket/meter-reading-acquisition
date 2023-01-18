@@ -10,6 +10,10 @@ dependencies {
     implementation project(":db")
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+
+    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:$spring_cloud_version"
+
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
