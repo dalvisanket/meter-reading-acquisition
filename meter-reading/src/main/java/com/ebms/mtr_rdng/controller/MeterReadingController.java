@@ -37,13 +37,13 @@ public class MeterReadingController {
     }
 
     @GetMapping("/get-meter/{meter_id}")
-    public ResponseEntity<MeterRow> getMeter(@PathVariable(name = "meter_id") long meter_id){
+    public ResponseEntity getMeter(@PathVariable(name = "meter_id") long meter_id){
         try{
             MeterRow meter = databaseRepository.getMeter(meter_id);
             return new ResponseEntity<>(meter,HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Meter with meter id: "+meter_id+" does not exist",HttpStatus.BAD_REQUEST);
         }
     }
 

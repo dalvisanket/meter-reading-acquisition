@@ -15,6 +15,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
 
     implementation project(":api-domain")
+    implementation project(":db")
 
 }
 

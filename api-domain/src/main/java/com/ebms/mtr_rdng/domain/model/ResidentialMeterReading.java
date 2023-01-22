@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -13,30 +12,39 @@ import java.time.YearMonth;
 @JsonDeserialize( builder = ResidentialMeterReading.ResidentialMeterReadingBuilder.class)
 public class ResidentialMeterReading implements MeterReading{
 
-    private final long mId;
-    private final double unitReading;
+    private final long reading_id;
+    private final long meter_id;
+    private final int unitReading;
     private final YearMonth billingCycle;
     private final LocalDate reportingDate;
     private final MeterType meterType;
-    private final String reportingEmp;
+    private final long reportingEmp;
 
     private ResidentialMeterReading(ResidentialMeterReadingBuilder builder){
-        this.mId = builder.mId;
+        this.reading_id = builder.reading_id;
+        this.meter_id = builder.meter_id;
         this.unitReading = builder.unitReading;
         this.billingCycle = builder.billingCycle;
         this.reportingDate = builder.reportingDate;
         this.meterType = builder.meterType;
         this.reportingEmp = builder.reportingEmp;
     }
+
     @Override
     @JsonGetter
-    public long mId() {
-        return this.mId;
+    public long reading_id() {
+        return this.reading_id;
     }
 
     @Override
     @JsonGetter
-    public double unitReading() {
+    public long meter_id() {
+        return this.meter_id;
+    }
+
+    @Override
+    @JsonGetter
+    public int unitReading() {
         return this.unitReading;
     }
 
@@ -61,7 +69,7 @@ public class ResidentialMeterReading implements MeterReading{
 
     @Override
     @JsonGetter
-    public String reportingEmp() {
+    public long reportingEmp() {
         return this.reportingEmp;
     }
 
@@ -69,24 +77,43 @@ public class ResidentialMeterReading implements MeterReading{
         return new ResidentialMeterReadingBuilder();
     }
 
+    public ResidentialMeterReadingBuilder toBuilder(){
+        return new ResidentialMeterReadingBuilder()
+                .reading_id(this.reading_id)
+                .meter_id(this.meter_id)
+                .unitReading(this.unitReading)
+                .billingCycle(this.billingCycle)
+                .reportingDate(this.reportingDate)
+                .meterType(this.meterType)
+                .reportingEmp(this.reportingEmp);
+    }
+
     @JsonPOJOBuilder
     public static final class ResidentialMeterReadingBuilder implements Builder<ResidentialMeterReading>{
 
-        private long mId;
-        private double unitReading;
+        private long reading_id;
+        private long meter_id;
+        private int unitReading;
         private YearMonth billingCycle;
         private LocalDate reportingDate;
         private MeterType meterType;
-        private String reportingEmp;
+        private long reportingEmp;
+
 
         @JsonSetter
-        public ResidentialMeterReadingBuilder mId(long mId){
-            this.mId = mId;
+        public ResidentialMeterReadingBuilder reading_id(long reading_id){
+            this.reading_id = reading_id;
             return this;
         }
 
         @JsonSetter
-        public ResidentialMeterReadingBuilder unitReading(double unitReading){
+        public ResidentialMeterReadingBuilder meter_id(long meter_id){
+            this.meter_id = meter_id;
+            return this;
+        }
+
+        @JsonSetter
+        public ResidentialMeterReadingBuilder unitReading(int unitReading){
             this.unitReading = unitReading;
             return this;
         }
@@ -110,7 +137,7 @@ public class ResidentialMeterReading implements MeterReading{
         }
 
         @JsonSetter
-        public ResidentialMeterReadingBuilder reportingEmp(String reportingEmp){
+        public ResidentialMeterReadingBuilder reportingEmp(long reportingEmp){
             this.reportingEmp = reportingEmp;
             return this;
         }

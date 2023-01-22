@@ -5,8 +5,11 @@ import com.ebms.mtr_rdng.db.domain.model.MeterRow;
 
 
 import com.ebms.mtr_rdng.db.enums.ConsumerIsActive;
+import com.ebms.mtr_rdng.db.enums.ConsumerIsMeterAssigned;
 import com.ebms.mtr_rdng.db.enums.MeterInUse;
+import com.ebms.mtr_rdng.domain.model.MeterReading;
 import com.ebms.mtr_rdng.domain.model.MeterType;
+import com.ebms.util.exception.EntityNotFoundException;
 import org.jooq.DSLContext;
 
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.List;
 import static com.ebms.mtr_rdng.db.tables.Consumer.CONSUMER;
 import static com.ebms.mtr_rdng.db.tables.Meter.METER;
 import static com.ebms.mtr_rdng.db.tables.ConsumerMeter.CONSUMER_METER;
+import static com.ebms.mtr_rdng.db.tables.MeterReading.METER_READING;
 
 
 public class MeterReadingRepository implements DatabaseRepository{
@@ -41,7 +45,7 @@ public class MeterReadingRepository implements DatabaseRepository{
                 .where(METER.METER_ID.eq(meter_id))
                 .fetchInto(MeterRow.class);
         if(meters.size() !=1){
-            throw new RuntimeException("No Meter found with meter id: " + meter_id);
+            throw new EntityNotFoundException("No Meter found with meter id: " + meter_id);
         }
          return meters.get(0);
     }
@@ -62,8 +66,8 @@ public class MeterReadingRepository implements DatabaseRepository{
     @Override
     public long addNewConsumer(ConsumerRow consumer) {
 
-        context.insertInto(CONSUMER,CONSUMER.CONSUMER_ID,CONSUMER.NAME,CONSUMER.ADDRESS,CONSUMER.CITY,CONSUMER.ZIPCODE, CONSUMER.EMAIL, CONSUMER.IS_ACTIVE)
-                .values(consumer.consumer_id(),consumer.name(), consumer.address(),consumer.city(),consumer.zipcode(),consumer.email(), ConsumerIsActive.true_)
+        context.insertInto(CONSUMER,CONSUMER.CONSUMER_ID,CONSUMER.NAME,CONSUMER.ADDRESS,CONSUMER.CITY,CONSUMER.ZIPCODE, CONSUMER.EMAIL, CONSUMER.IS_ACTIVE,CONSUMER.IS_METER_ASSIGNED)
+                .values(consumer.consumer_id(),consumer.name(), consumer.address(),consumer.city(),consumer.zipcode(),consumer.email(), ConsumerIsActive.true_, ConsumerIsMeterAssigned.false_)
                 .execute();
 
         return getConsumer(consumer.consumer_id()).consumer_id();
@@ -77,7 +81,7 @@ public class MeterReadingRepository implements DatabaseRepository{
                 .fetchInto(ConsumerRow.class);
 
         if(consumers.size() !=1){
-            throw new RuntimeException("No Consumer found with consumer id: " + consumer_id);
+            throw new EntityNotFoundException("No Consumer found with consumer id: " + consumer_id);
         }
         return consumers.get(0);
     }
@@ -103,10 +107,34 @@ public class MeterReadingRepository implements DatabaseRepository{
                    .execute();
 
            changeMeterStatus(meter_id,true);
+           changeIsMeterAssignedToConsumer(consumer_id,true);
 
            return true;
        }
         return false;
+    }
+
+    @Override
+    public boolean changeIsMeterAssignedToConsumer(long consumer_id, boolean is_meter_assigned){
+        context.update(CONSUMER)
+                .set(CONSUMER.IS_METER_ASSIGNED, is_meter_assigned? ConsumerIsMeterAssigned.true_:ConsumerIsMeterAssigned.false_)
+                .where(CONSUMER.CONSUMER_ID.eq(consumer_id))
+                .execute();
+        return true;
+    }
+
+    @Override
+    public boolean saveMeterReading(MeterReading meterReading) {
+        try {
+            getMeter(meterReading.meter_id());
+            context.insertInto(METER_READING,METER_READING.READING_ID, METER_READING.METER_ID, METER_READING.UNITS_CONSUMED,METER_READING.BILLING_CYCLE, METER_READING.REPORTING_DATE,METER_READING.REPORTING_EMP_ID)
+                    .values(meterReading.reading_id(),meterReading.meter_id(),meterReading.unitReading(), meterReading.billingCycle().atEndOfMonth(),meterReading.reportingDate(),meterReading.reportingEmp())
+                    .execute();
+            return true;
+        }
+        catch (Exception e){
+            throw new EntityNotFoundException("Could not save meter reading");
+        }
     }
 
 
