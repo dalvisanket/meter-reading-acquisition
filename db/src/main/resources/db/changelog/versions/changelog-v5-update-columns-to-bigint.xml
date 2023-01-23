@@ -8,25 +8,25 @@
 
 
     <changeSet id="drop meter_reading constraints" author="sanket">
-        <dropAllForeignKeyConstraints baseTableName="meter_reading" baseTableSchemaName="ebms"/>
+        <dropAllForeignKeyConstraints baseTableName="meter_reading"/>
     </changeSet>
 
     <changeSet id="change meter-id to bigint" author="sanket">
-        <modifyDataType tableName="meter" columnName="meter_id" newDataType="bigint" schemaName="ebms"/>
+        <modifyDataType tableName="meter" columnName="meter_id" newDataType="bigint"/>
     </changeSet>
 
     <changeSet id="change emp-id to bigint" author="sanket">
-        <modifyDataType tableName="employee" columnName="emp_id" newDataType="bigint" schemaName="ebms"/>
+        <modifyDataType tableName="employee" columnName="emp_id" newDataType="bigint"/>
     </changeSet>
 
     <changeSet id="change consumer_id to bigint" author="sanket">
-        <modifyDataType tableName="consumer" columnName="consumer_id" newDataType="bigint" schemaName="ebms"/>
+        <modifyDataType tableName="consumer" columnName="consumer_id" newDataType="bigint"/>
     </changeSet>
 
     <changeSet id="change reporting_emp_id and meter_id to bigint" author="sanket">
-        <modifyDataType tableName="meter_reading" columnName="reading_id" newDataType="bigint" schemaName="ebms"/>
-        <modifyDataType tableName="meter_reading" columnName="meter_id" newDataType="bigint" schemaName="ebms"/>
-        <modifyDataType tableName="meter_reading" columnName="reporting_emp_id" newDataType="bigint" schemaName="ebms"/>
+        <modifyDataType tableName="meter_reading" columnName="reading_id" newDataType="bigint"/>
+        <modifyDataType tableName="meter_reading" columnName="meter_id" newDataType="bigint"/>
+        <modifyDataType tableName="meter_reading" columnName="reporting_emp_id" newDataType="bigint"/>
     </changeSet>
 
 

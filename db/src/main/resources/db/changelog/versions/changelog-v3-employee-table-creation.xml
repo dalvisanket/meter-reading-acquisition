@@ -9,7 +9,7 @@
 
     <changeSet id="create employee table" author="sanket">
 
-        <createTable schemaName="ebms" tableName="employee">
+        <createTable tableName="employee">
             <column name="emp_id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>

@@ -6,5 +6,17 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <includeAll path="db/changelog/versions/"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v1-meter-table-creation.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v2-consumer-table-creation.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v3-employee-table-creation.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v4-reading_details-table-creation.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v5-update-columns-to-bigint.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v6-consumer_meter-table-creation.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v7-add-email-column-consumer-table.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v8-add_is_active_column-to-meter-and-consumer-table.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v9-add_is_meter_assigned_column-to-consumer-table.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v10-change-in_use-and-is_active-meter-and-consumer-table.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v11-drop-is_active-consumer.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v12-add-is_active-consumer_meter.xml"/>
+    <include file="db/src/main/resources/db/changelog/versions/changelog-v13-consumer_meter_reading-table-creation.xml"/>
 </databaseChangeLog>

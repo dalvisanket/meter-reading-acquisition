@@ -7,9 +7,9 @@
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
 
-    <changeSet id="create meter table" author="liquibase">
+    <changeSet id="create meter table" author="sanket">
 
-        <createTable schemaName="ebms" tableName="meter">
+        <createTable tableName="meter">
 
             <column name="meter_id" type="int" autoIncrement="true" >
             <constraints nullable="false" primaryKey="true"/>

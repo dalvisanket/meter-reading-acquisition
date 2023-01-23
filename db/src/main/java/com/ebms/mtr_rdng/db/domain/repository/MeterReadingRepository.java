@@ -4,7 +4,6 @@ import com.ebms.mtr_rdng.db.domain.model.ConsumerRow;
 import com.ebms.mtr_rdng.db.domain.model.MeterRow;
 
 
-import com.ebms.mtr_rdng.db.enums.ConsumerIsActive;
 import com.ebms.mtr_rdng.db.enums.ConsumerIsMeterAssigned;
 import com.ebms.mtr_rdng.db.enums.MeterInUse;
 import com.ebms.mtr_rdng.domain.model.MeterReading;
@@ -66,8 +65,8 @@ public class MeterReadingRepository implements DatabaseRepository{
     @Override
     public long addNewConsumer(ConsumerRow consumer) {
 
-        context.insertInto(CONSUMER,CONSUMER.CONSUMER_ID,CONSUMER.NAME,CONSUMER.ADDRESS,CONSUMER.CITY,CONSUMER.ZIPCODE, CONSUMER.EMAIL, CONSUMER.IS_ACTIVE,CONSUMER.IS_METER_ASSIGNED)
-                .values(consumer.consumer_id(),consumer.name(), consumer.address(),consumer.city(),consumer.zipcode(),consumer.email(), ConsumerIsActive.true_, ConsumerIsMeterAssigned.false_)
+        context.insertInto(CONSUMER,CONSUMER.CONSUMER_ID,CONSUMER.NAME,CONSUMER.ADDRESS,CONSUMER.CITY,CONSUMER.ZIPCODE, CONSUMER.EMAIL, CONSUMER.IS_METER_ASSIGNED)
+                .values(consumer.consumer_id(),consumer.name(), consumer.address(),consumer.city(),consumer.zipcode(),consumer.email(), ConsumerIsMeterAssigned.false_)
                 .execute();
 
         return getConsumer(consumer.consumer_id()).consumer_id();
@@ -101,7 +100,7 @@ public class MeterReadingRepository implements DatabaseRepository{
             throw new RuntimeException();
         }
 
-       if(getConsumer(consumer_id).is_active().equals(ConsumerIsActive.true_) && !getMeter(meter_id).in_use()){
+       if(getConsumer(consumer_id).is_meter_assigned().equals(ConsumerIsMeterAssigned.false_) && !getMeter(meter_id).in_use()){
            context.insertInto(CONSUMER_METER,CONSUMER_METER.CONSUMER_ID, CONSUMER_METER.METER_ID)
                    .values(consumer_id,meter_id)
                    .execute();

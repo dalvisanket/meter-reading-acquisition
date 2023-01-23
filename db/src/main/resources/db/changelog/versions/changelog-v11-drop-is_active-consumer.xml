@@ -7,14 +7,10 @@
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
 
-    <changeSet id="add is_meter_assigned column to consumer table" author="sanket">
-
-        <addColumn tableName="consumer" >
-            <column name="is_meter_assigned" type="enum('true','false')" defaultValue="false">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-
+    <changeSet id="drop is_active column from consumer table" author="sanket">
+        <dropColumn tableName="consumer" columnName="is_active">
+            <column name="is_active"/>
+        </dropColumn>
     </changeSet>
 
 

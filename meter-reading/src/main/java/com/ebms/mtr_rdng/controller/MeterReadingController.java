@@ -63,7 +63,6 @@ public class MeterReadingController {
                 .address(consumer.address())
                 .city(consumer.city())
                 .zipcode(consumer.zipcode())
-                .is_active("yes")
                 .build();
 
         try{

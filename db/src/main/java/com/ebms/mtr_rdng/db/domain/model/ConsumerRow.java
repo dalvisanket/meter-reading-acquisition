@@ -21,8 +21,6 @@ public class ConsumerRow {
     private String city;
     private int zipcode;
     private String email;
-    private String is_active;
-
     private String is_meter_assigned;
 
 
@@ -33,7 +31,6 @@ public class ConsumerRow {
         this.address = builder.address;
         this.zipcode = builder.zipcode;
         this.email = builder.email;
-        this.is_active = builder.is_active;
         this.is_meter_assigned = builder.is_meter_assigned;
     }
 
@@ -68,11 +65,6 @@ public class ConsumerRow {
     public String email(){ return this.email; }
 
     @JsonGetter
-    public String is_active(){
-        return is_active;
-    }
-
-    @JsonGetter
     public String is_meter_assigned(){
         return is_meter_assigned;
     }
@@ -91,7 +83,6 @@ public class ConsumerRow {
         private String city;
         private int zipcode;
         private String email;
-        private String is_active;
         private String is_meter_assigned;
 
         @JsonSetter
@@ -127,12 +118,6 @@ public class ConsumerRow {
         @JsonSetter
         public ConsumerRowBuilder email(String email){
             this.email = email;
-            return this;
-        }
-
-        @JsonSetter
-        public ConsumerRowBuilder is_active(String is_active){
-            this.is_active = is_active;
             return this;
         }
 

@@ -9,7 +9,7 @@
 
     <changeSet id="create consumer table" author="liquibase">
 
-        <createTable schemaName="ebms" tableName="consumer">
+        <createTable tableName="consumer">
 
             <column name="consumer_id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>

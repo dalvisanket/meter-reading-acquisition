@@ -9,7 +9,7 @@
 
     <changeSet id="create consumer_meter table" author="sanket">
 
-        <createTable schemaName="ebms" tableName="consumer_meter">
+        <createTable tableName="consumer_meter">
 
             <column name="meter_id" type="bigint">
                 <constraints nullable="false" foreignKeyName="fk_meter_id_consumermeter" references="meter(meter_id)" primaryKey="true"/>

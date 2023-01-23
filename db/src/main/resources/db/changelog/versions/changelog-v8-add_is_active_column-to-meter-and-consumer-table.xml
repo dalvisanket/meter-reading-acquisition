@@ -9,13 +9,13 @@
 
     <changeSet id="add is_active column to meter and consumer table" author="sanket">
 
-        <addColumn tableName="consumer" schemaName="ebms">
+        <addColumn tableName="consumer" >
             <column name="is_active" type="enum('yes','no')" defaultValue="yes">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
 
-        <addColumn tableName="meter" schemaName="ebms">
+        <addColumn tableName="meter">
             <column name="in_use" type="enum('yes','no')" defaultValue="no">
                 <constraints nullable="false"/>
             </column>

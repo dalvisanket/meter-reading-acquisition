@@ -9,7 +9,7 @@
 
     <changeSet id="add email id column consumer table" author="sanket">
 
-        <addColumn tableName="consumer" schemaName="ebms">
+        <addColumn tableName="consumer" >
             <column name="email" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
