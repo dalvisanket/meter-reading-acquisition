@@ -1,11 +1,14 @@
 package com.ebms.mtr_rdng.db.domain.repository;
 
+import com.ebms.mtr_rdng.db.domain.model.ConsumerMeterReadingRow;
+import com.ebms.mtr_rdng.db.domain.model.ConsumerMeterRow;
 import com.ebms.mtr_rdng.db.domain.model.ConsumerRow;
 import com.ebms.mtr_rdng.db.domain.model.MeterRow;
 import com.ebms.mtr_rdng.domain.model.MeterReading;
 import com.ebms.mtr_rdng.domain.model.MeterType;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DatabaseRepository {
 
@@ -15,8 +18,6 @@ public interface DatabaseRepository {
 
     List<MeterRow> getAllMeters();
 
-    boolean changeMeterStatus(long meter_id, boolean in_use);
-
     long addNewConsumer(ConsumerRow consumer);
 
     ConsumerRow getConsumer(long consumer_id);
@@ -25,9 +26,13 @@ public interface DatabaseRepository {
 
     boolean assignMeterToConsumer(long consumer_id,long meter_id);
 
-    public boolean changeIsMeterAssignedToConsumer(long consumer_id, boolean is_meter_assigned);
+    public boolean changeIsMeterAssignedToConsumer(long consumer_id, long meter_id, boolean keep_association);
 
     public boolean saveMeterReading(MeterReading meterReading);
+
+    ConsumerMeterRow getActiveMeterConsumerAssociation(Optional<Long> meter_id, Optional<Long> consumer_id);
+
+    boolean saveConsumerMeterReading(long meter_id, long consumer_id, long reading_id);
 
 /*    ConsumerDetails getConsumerDetails(long consumer_id);*/
 }

@@ -47,13 +47,7 @@ public class KafkaQueueApplication {
                     43676763L,
                     87545223L,
                     14556565L,
-                    65654555L,
-                    86764345L,
-                    34256763L,
-                    34567526L,
-                    23457672L,
-                    86587633L,
-                    98564442L);
+                    65654555L);
 
             List<Month> months = Arrays.asList(Month.JANUARY,
                     Month.FEBRUARY,

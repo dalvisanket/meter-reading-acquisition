@@ -1,26 +1,25 @@
 package com.ebms.mtr_rdng.db.domain.model;
 
-
 import com.ebms.util.builder.Builder;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
-@JsonDeserialize(builder = ConsumerMeterRow.ConsumerMeterRowBuilder.class)
-public class ConsumerMeterRow {
+@JsonDeserialize(builder = ConsumerMeterReadingRow.ConsumerMeterReadingRowBuilder.class)
+public class ConsumerMeterReadingRow {
 
     private long meter_id;
-    private long consumer_id;
-    private String is_active;
 
-    private ConsumerMeterRow(ConsumerMeterRowBuilder builder){
+    private long consumer_id;
+
+    private long reading_id;
+
+    private ConsumerMeterReadingRow(ConsumerMeterReadingRowBuilder builder){
         this.meter_id = builder.meter_id;
         this.consumer_id = builder.consumer_id;
-        this.is_active = builder.is_active;
+        this.reading_id = builder.reading_id;
     }
-
-    public ConsumerMeterRow(){}
 
     @JsonGetter
     public long meter_id(){
@@ -32,42 +31,42 @@ public class ConsumerMeterRow {
         return this.consumer_id;
     }
 
-    @JsonGetter String is_active(){return this.is_active;}
-
-
-    public ConsumerMeterRowBuilder builder(){
-        return new ConsumerMeterRowBuilder();
+    @JsonGetter
+    public long reading_id(){
+        return this.reading_id;
     }
 
     @JsonPOJOBuilder
-    public static final class ConsumerMeterRowBuilder implements Builder<ConsumerMeterRow>{
+    public static final class ConsumerMeterReadingRowBuilder implements Builder<ConsumerMeterReadingRow>{
 
         private long meter_id;
+
         private long consumer_id;
-        private String is_active;
+
+        private long reading_id;
 
         @JsonSetter
-        public ConsumerMeterRowBuilder meter_id(long meter_id){
+        public ConsumerMeterReadingRowBuilder meter_id(long meter_id){
             this.meter_id = meter_id;
             return this;
         }
 
         @JsonSetter
-        public ConsumerMeterRowBuilder consumer_id(long consumer_id){
+        public ConsumerMeterReadingRowBuilder consumer_id(long consumer_id){
             this.consumer_id = consumer_id;
             return this;
         }
 
 
         @JsonSetter
-        public ConsumerMeterRowBuilder is_active(String is_active){
-            this.is_active = is_active;
+        public ConsumerMeterReadingRowBuilder reading_id(long reading_id){
+            this.reading_id = reading_id;
             return this;
         }
 
         @Override
-        public ConsumerMeterRow build() {
-            return new ConsumerMeterRow(this);
+        public ConsumerMeterReadingRow build() {
+            return new ConsumerMeterReadingRow(this);
         }
     }
 }

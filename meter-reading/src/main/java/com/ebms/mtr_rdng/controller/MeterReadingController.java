@@ -94,7 +94,7 @@ public class MeterReadingController {
             throw new RuntimeException();
         }
         catch (Exception e){
-            return new ResponseEntity("Error assigning meter to coonsumer", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Error assigning meter to consumer", HttpStatus.BAD_REQUEST);
         }
 
 
