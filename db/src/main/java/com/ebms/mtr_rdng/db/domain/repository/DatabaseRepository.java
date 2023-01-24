@@ -3,6 +3,7 @@ package com.ebms.mtr_rdng.db.domain.repository;
 import com.ebms.mtr_rdng.db.domain.model.ConsumerMeterReadingRow;
 import com.ebms.mtr_rdng.db.domain.model.ConsumerMeterRow;
 import com.ebms.mtr_rdng.db.domain.model.ConsumerRow;
+import com.ebms.mtr_rdng.db.domain.model.MeterReadingRow;
 import com.ebms.mtr_rdng.db.domain.model.MeterRow;
 import com.ebms.mtr_rdng.domain.model.MeterReading;
 import com.ebms.mtr_rdng.domain.model.MeterType;
@@ -33,6 +34,10 @@ public interface DatabaseRepository {
     ConsumerMeterRow getActiveMeterConsumerAssociation(Optional<Long> meter_id, Optional<Long> consumer_id);
 
     boolean saveConsumerMeterReading(long meter_id, long consumer_id, long reading_id);
+
+    List<ConsumerMeterReadingRow> getAllReadingIds(long meter_id, long consumer_id);
+
+    List<MeterReadingRow> getAllMeterReadings(long meter_id, long consumer_id);
 
 /*    ConsumerDetails getConsumerDetails(long consumer_id);*/
 }

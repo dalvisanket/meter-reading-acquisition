@@ -58,6 +58,7 @@ public class KafkaQueueApplication {
                     Month.JULY,
                     Month.AUGUST,
                     Month.SEPTEMBER,
+                    Month.OCTOBER,
                     Month.NOVEMBER,
                     Month.DECEMBER);
 

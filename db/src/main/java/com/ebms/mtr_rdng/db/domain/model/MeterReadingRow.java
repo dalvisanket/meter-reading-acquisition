@@ -27,6 +27,7 @@ public class MeterReadingRow {
         this.reporting_emp_id = builder.reporting_emp_id;
     }
 
+    public MeterReadingRow(){}
 
     @JsonGetter
     public long reading_id(){

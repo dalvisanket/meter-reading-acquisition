@@ -1,6 +1,7 @@
 package com.ebms.mtr_rdng.controller;
 
 import com.ebms.mtr_rdng.db.domain.model.ConsumerRow;
+import com.ebms.mtr_rdng.db.domain.model.MeterReadingRow;
 import com.ebms.mtr_rdng.db.domain.model.MeterRow;
 import com.ebms.mtr_rdng.db.domain.repository.DatabaseRepository;
 import com.ebms.mtr_rdng.domain.model.MeterType;
@@ -98,6 +99,18 @@ public class MeterReadingController {
         }
 
 
+    }
+
+
+    @GetMapping("/get-all-meter-readings/{meter_id}/{consumer_id}")
+    public ResponseEntity<List<MeterReadingRow>> getAllMeterReadings(@PathVariable(name = "meter_id") long meter_id, @PathVariable(name = "consumer_id") long consumer_id){
+        try{
+            List<MeterReadingRow> meterReadings = databaseRepository.getAllMeterReadings(meter_id,consumer_id);
+            return new ResponseEntity(meterReadings,HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
