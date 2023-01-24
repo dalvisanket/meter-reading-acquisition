@@ -15,8 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @RestController
 public class MeterReadingController {
@@ -111,6 +118,37 @@ public class MeterReadingController {
         catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/get-meter-readings-for-year/{meter_id}/{consumer_id}")
+    public ResponseEntity<Map<Year,List<MeterReadingRow>>> getMeterReadingForYear(@PathVariable(name = "meter_id") long meter_id, @PathVariable(name = "consumer_id") long consumer_id){
+        try{
+            List<MeterReadingRow> meterReadings = getAllMeterReadings(meter_id,consumer_id).getBody();
+
+            Map<Year,List<MeterReadingRow>> year_map = new HashMap<>();
+
+            meterReadings = meterReadings.stream()
+                    .sorted(Comparator.comparing(MeterReadingRow::billing_cycle))
+                    .collect(Collectors.toList());
+
+            for(MeterReadingRow meterReadingRow : meterReadings){
+                Year year = Year.of(meterReadingRow.billing_cycle().getYear());
+                if(year_map.containsKey(year)){
+                    List<MeterReadingRow> readingRow = year_map.get(year);
+                    readingRow.add(meterReadingRow);
+                    year_map.replace(year,readingRow);
+                }
+                else{
+                    year_map.put(year,new LinkedList<>(){{add(meterReadingRow);}});
+                }
+            }
+
+            return new ResponseEntity(year_map,HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 }
