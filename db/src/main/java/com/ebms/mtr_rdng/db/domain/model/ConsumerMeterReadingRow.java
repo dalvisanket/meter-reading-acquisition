@@ -20,6 +20,7 @@ public class ConsumerMeterReadingRow {
         this.consumer_id = builder.consumer_id;
         this.reading_id = builder.reading_id;
     }
+    public ConsumerMeterReadingRow(){}
 
     @JsonGetter
     public long meter_id(){

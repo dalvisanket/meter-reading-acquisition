@@ -3,6 +3,7 @@ package com.ebms.mtr_rdng.db.domain.repository;
 import com.ebms.mtr_rdng.db.domain.model.ConsumerMeterReadingRow;
 import com.ebms.mtr_rdng.db.domain.model.ConsumerMeterRow;
 import com.ebms.mtr_rdng.db.domain.model.ConsumerRow;
+import com.ebms.mtr_rdng.db.domain.model.MeterReadingRow;
 import com.ebms.mtr_rdng.db.domain.model.MeterRow;
 
 
@@ -14,8 +15,10 @@ import com.ebms.mtr_rdng.domain.model.MeterType;
 import com.ebms.util.exception.EntityNotFoundException;
 import org.jooq.DSLContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.ebms.mtr_rdng.db.tables.Consumer.CONSUMER;
 import static com.ebms.mtr_rdng.db.tables.Meter.METER;
@@ -51,7 +54,7 @@ public class MeterReadingRepository implements DatabaseRepository{
         if(meters.size() !=1){
             throw new EntityNotFoundException("No Meter found with meter id: " + meter_id);
         }
-         return meters.get(0);
+        return meters.get(0);
     }
 
     @Override
@@ -60,7 +63,6 @@ public class MeterReadingRepository implements DatabaseRepository{
                 .from(METER)
                 .fetchInto(MeterRow.class);
     }
-
 
     @Override
     public long addNewConsumer(ConsumerRow consumer) {
@@ -96,15 +98,15 @@ public class MeterReadingRepository implements DatabaseRepository{
     @Override
     public boolean assignMeterToConsumer(long consumer_id, long meter_id) {
 
-       if(getConsumer(consumer_id).is_meter_assigned().equals(ConsumerIsMeterAssigned.false_.getLiteral()) && !getMeter(meter_id).in_use()){
-           context.insertInto(CONSUMER_METER,CONSUMER_METER.CONSUMER_ID, CONSUMER_METER.METER_ID, CONSUMER_METER.IS_ACTIVE)
-                   .values(consumer_id,meter_id,ConsumerMeterIsActive.true_)
-                   .execute();
+        if(getConsumer(consumer_id).is_meter_assigned().equals(ConsumerIsMeterAssigned.false_.getLiteral()) && !getMeter(meter_id).in_use()){
+            context.insertInto(CONSUMER_METER,CONSUMER_METER.CONSUMER_ID, CONSUMER_METER.METER_ID, CONSUMER_METER.IS_ACTIVE)
+                    .values(consumer_id,meter_id,ConsumerMeterIsActive.true_)
+                    .execute();
 
-           changeIsMeterAssignedToConsumer(consumer_id, meter_id,true);
+            changeIsMeterAssignedToConsumer(consumer_id, meter_id,true);
 
-           return true;
-       }
+            return true;
+        }
         return false;
     }
 
@@ -188,6 +190,39 @@ public class MeterReadingRepository implements DatabaseRepository{
                 .values(meter_id,consumer_id,reading_id)
                 .execute();
         return true;
+    }
+
+    @Override
+    public List<ConsumerMeterReadingRow> getAllReadingIds(long meter_id, long consumer_id) {
+
+        List<ConsumerMeterReadingRow> consumerMeterReadingRows = context.select()
+                .from(CONSUMER_METER_READING)
+                .where(CONSUMER_METER_READING.METER_ID.eq(meter_id))
+                .and(CONSUMER_METER_READING.CONSUMER_ID.eq(consumer_id))
+                .fetchInto(ConsumerMeterReadingRow.class);
+
+        return consumerMeterReadingRows;
+    }
+
+    @Override
+    public List<MeterReadingRow> getAllMeterReadings(long meter_id, long consumer_id) {
+
+        List<ConsumerMeterReadingRow> consumerMeterReadingRows = getAllReadingIds(meter_id,consumer_id);
+
+        List<MeterReadingRow> meterReadingRows = consumerMeterReadingRows.stream()
+                .map(row -> {
+                    List<MeterReadingRow> rows = context.select()
+                            .from(METER_READING)
+                            .where(METER_READING.METER_ID.eq(meter_id))
+                            .and(METER_READING.READING_ID.eq(row.reading_id()))
+                            .fetchInto(MeterReadingRow.class);
+                    if(rows.size() != 1){
+                        throw new EntityNotFoundException("Not able to find meter reading");
+                    }
+                    return rows.get(0);
+                }).collect(Collectors.toList());
+
+        return meterReadingRows;
     }
 
 
