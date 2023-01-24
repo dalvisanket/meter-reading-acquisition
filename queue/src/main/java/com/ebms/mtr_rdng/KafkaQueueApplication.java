@@ -71,7 +71,7 @@ public class KafkaQueueApplication {
                 for (int i = 0; i < months.size(); i++) {
                     YearMonth billingCycle;
                     if (i == 0) {
-                        billingCycle = YearMonth.of(year, Month.DECEMBER);
+                        billingCycle = YearMonth.of(year-1, Month.DECEMBER);
                     } else {
                         billingCycle = YearMonth.of(year, months.get(i - 1));
                     }
