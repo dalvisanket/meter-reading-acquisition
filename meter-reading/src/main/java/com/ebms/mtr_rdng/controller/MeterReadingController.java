@@ -1,5 +1,6 @@
 package com.ebms.mtr_rdng.controller;
 
+import com.ebms.mtr_rdng.db.domain.model.ConsumerMeterRow;
 import com.ebms.mtr_rdng.db.domain.model.ConsumerRow;
 import com.ebms.mtr_rdng.db.domain.model.MeterReadingRow;
 import com.ebms.mtr_rdng.db.domain.model.MeterRow;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -151,4 +153,14 @@ public class MeterReadingController {
 
     }
 
+
+    @GetMapping("/get-consumer-meter-association/consumer-id/{consumer_id}")
+    public ResponseEntity<List<ConsumerMeterRow>> getAssociationFromConsumerId( @PathVariable(name = "consumer_id") long consumer_id){
+        return new ResponseEntity(databaseRepository.getAllMeterConsumerAssociation(null, Optional.of(consumer_id)),HttpStatus.OK);
+    }
+
+    @GetMapping("/get-consumer-meter-association/meter-id/{meter_id}")
+    public ResponseEntity<List<ConsumerMeterRow>> getAssociationFromMeterId( @PathVariable(name = "meter_id") long meter_id){
+        return new ResponseEntity(databaseRepository.getAllMeterConsumerAssociation(Optional.of(meter_id),null),HttpStatus.OK);
+    }
 }
