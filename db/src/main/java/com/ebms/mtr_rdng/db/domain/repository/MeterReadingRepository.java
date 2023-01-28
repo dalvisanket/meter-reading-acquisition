@@ -155,7 +155,7 @@ public class MeterReadingRepository implements DatabaseRepository{
     @Override
     public ConsumerMeterRow getActiveMeterConsumerAssociation(Optional<Long> meter_id, Optional<Long> consumer_id) {
 
-        if(meter_id.isEmpty() && consumer_id.isEmpty()){
+        if(meter_id == null && consumer_id == null){
             throw new EntityNotFoundException("No meter id and consumer id provided");
         }
 
@@ -223,6 +223,32 @@ public class MeterReadingRepository implements DatabaseRepository{
                 }).collect(Collectors.toList());
 
         return meterReadingRows;
+    }
+
+    @Override
+    public List<ConsumerMeterRow>  getAllMeterConsumerAssociation(Optional<Long> meter_id, Optional<Long> consumer_id) {
+        if(meter_id == null && consumer_id == null){
+            throw new EntityNotFoundException("No meter id and consumer id provided");
+        }
+
+        List<ConsumerMeterRow> activeConsumerMeters;
+
+        if(meter_id == null){
+
+            activeConsumerMeters= context.select()
+                    .from(CONSUMER_METER)
+                    .where(CONSUMER_METER.CONSUMER_ID.eq(consumer_id.get()))
+                    .fetchInto(ConsumerMeterRow.class);
+        }
+        else{
+            activeConsumerMeters = context.select()
+                    .from(CONSUMER_METER)
+                    .where(CONSUMER_METER.METER_ID.eq(meter_id.get()))
+                    .fetchInto(ConsumerMeterRow.class);
+        }
+
+
+        return activeConsumerMeters;
     }
 
 

@@ -39,5 +39,7 @@ public interface DatabaseRepository {
 
     List<MeterReadingRow> getAllMeterReadings(long meter_id, long consumer_id);
 
+    List<ConsumerMeterRow>  getAllMeterConsumerAssociation(Optional<Long> meter_id, Optional<Long> consumer_id);
+
 /*    ConsumerDetails getConsumerDetails(long consumer_id);*/
 }

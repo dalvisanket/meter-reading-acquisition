@@ -11,7 +11,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -23,11 +22,11 @@ public class KafkaQueueApplication {
         SpringApplication.run(KafkaQueueApplication.class,args);
     }
 
-  /*  @Bean
+   /* @Bean
     CommandLineRunner commandLineRunner(KafkaTemplate<String, Object> kafkaTemplate){
         return args -> {
 
-            int year = 2021;
+            int year = 2020;
 
             List<Long> meterIds = Arrays.asList(86419618L,
                     78679679L,
