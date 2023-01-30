@@ -19,7 +19,7 @@ public class QueueConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootStrapServers;
     public Map<String,Object> producerConfig(){
-        return new HashMap<>(){{
+        return new HashMap<String,Object>(){{
             put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
             put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
             put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);

@@ -1,4 +1,12 @@
-import org.jooq.meta.jaxb.Logging
+import nu.studer.gradle.jooq.JooqEdition;
+
+buildscript {
+    configurations['classpath'].resolutionStrategy.eachDependency{
+        if(requested.group == 'org.jooq'){
+            useVersion  "$jooq_version"
+        }
+    }
+}
 
 plugins {
     id 'java'
@@ -28,10 +36,6 @@ dependencies {
 
 }
 
-
-
-
-
 def props = new Properties()
 
 task loadProperties{
@@ -46,7 +50,6 @@ task loadProperties{
 }
 
 
-
 jooq {
     version = "$jooq_version"
     edition = nu.studer.gradle.jooq.JooqEdition.OSS
@@ -56,7 +59,7 @@ jooq {
             generateSchemaSourceOnCompilation = true
 
             generationTool {
-                logging = Logging.WARN
+                logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc {
                     driver = 'com.mysql.cj.jdbc.Driver'
                     url = props.getProperty("spring.datasource.url")
@@ -103,6 +106,25 @@ jooq {
         }
     }
 }
+
+/*
+GenerationTool.generate(
+        new Configuration()
+            .withJdbc(new Jdbc()
+                .withDriver('com.mysql.cj.jdbc.Driver')
+                .withUser(props.getProperty("spring.datasource.username"))
+                .withPassword(props.getProperty("spring.datasource.password"))
+                .withUrl(props.getProperty("spring.datasource.url")))
+        .withGenerator(new Generator()
+            .withDatabase(new Database())
+            .withGenerate(new Generate()
+                .withPojos(true)
+                .withDaos(true))
+            .withTarget(new Target()
+                .withPackageName('com.ebms.mtr_rdng.db')
+                .withDirectory('build/generated-src/jooq/main')))
+)
+*/
 
 
 test {
