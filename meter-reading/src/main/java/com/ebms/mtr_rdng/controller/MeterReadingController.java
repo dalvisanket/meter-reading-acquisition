@@ -141,7 +141,7 @@ public class MeterReadingController {
                     year_map.replace(year,readingRow);
                 }
                 else{
-                    year_map.put(year,new LinkedList<>(){{add(meterReadingRow);}});
+                    year_map.put(year,new LinkedList<MeterReadingRow>(){{add(meterReadingRow);}});
                 }
             }
 
